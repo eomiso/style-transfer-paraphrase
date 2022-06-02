@@ -1,0 +1,26 @@
+style_paraphrase/examples/run_finetune_paraphrase.sh: 16: style_paraphrase/examples/run_finetune_paraphrase.sh: source: not found
+05/17/2022 06:46:00 - WARNING - __main__ -   Process rank: -1, device: cuda, n_gpu: 4, distributed training: False, 16-bits training: True
+05/17/2022 06:46:26 - INFO - __main__ -   Training/evaluation parameters Namespace(adam_epsilon=1e-08, cache_dir='', config_name='', data_dir='datasets/paranmt_filtered', device=device(type='cuda'), do_delete_old=False, do_eval=False, do_lower_case=False, do_train=True, eval_frequency_min=0, eval_patience=10, evaluate_during_training=True, evaluate_specific=None, extra_embedding_dim=768, fp16=True, fp16_opt_level='O3', global_dense_feature_list='none', gradient_accumulation_steps=2, job_id='paraphraser_test', learning_rate='5e-5', limit_examples=None, local_rank=-1, logging_steps=20, max_grad_norm=1.0, max_steps=-1, model_name_or_path='gpt2-large', model_type='gpt2', n_gpu=4, no_cuda=False, num_train_epochs=3.0, optimizer='adam', output_dir='style_paraphrase/saved_models/test_paraphrase', overwrite_output_dir=True, per_gpu_eval_batch_size=1, per_gpu_train_batch_size=1, prefix_input_type='original', save_steps=500, save_total_limit=-1, seed=42, specific_style_train='-1', target_style_override='none', tokenizer_name='', warmup_steps=0, weight_decay=0.0)
+05/17/2022 06:46:26 - INFO - style_dataset -   {'keys': [{'key': 'sent1_tokens', 'position': 3, 'tokenize': True, 'metadata': False}, {'key': 'sent2_tokens', 'position': 4, 'tokenize': True, 'metadata': False}, {'key': 'f1_score', 'position': 5, 'tokenize': False, 'metadata': True}, {'key': 'kt_score', 'position': 6, 'tokenize': False, 'metadata': True}, {'key': 'ed_score', 'position': 7, 'tokenize': False, 'metadata': True}, {'key': 'langid', 'position': 8, 'tokenize': False, 'metadata': True}], 'max_total_length': 100, 'max_prefix_length': 50, 'max_suffix_length': 50, 'max_dense_length': 2, 'global_dense_length': 0}
+05/17/2022 06:46:26 - INFO - style_dataset -   Loading features from cached file datasets/paranmt_filtered/gpt2_cached_lm_train
+05/17/2022 06:46:50 - INFO - style_dataset -   Total truncated instances due to length limit = 213 / 73062
+/root/miniconda3/envs/style-venv/lib/python3.7/site-packages/transformers/optimization.py:309: FutureWarning: This implementation of AdamW is deprecated and will be removed in a future version. Use the PyTorch implementation torch.optim.AdamW instead, or set `no_deprecation_warning=True` to disable this warning
+  FutureWarning,
+05/17/2022 06:46:50 - INFO - __main__ -   ***** Running training *****
+05/17/2022 06:46:50 - INFO - __main__ -     Num examples = 73062
+05/17/2022 06:46:50 - INFO - __main__ -     Num Epochs = 3
+05/17/2022 06:46:50 - INFO - __main__ -     Instantaneous batch size per GPU = 1
+05/17/2022 06:46:50 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 8
+05/17/2022 06:46:50 - INFO - __main__ -     Gradient Accumulation steps = 2
+05/17/2022 06:46:50 - INFO - __main__ -     Total optimization steps = 27399
+Epoch:   0%|          | 0/3 [00:00<?, ?it/s]
+Iteration:   0%|          | 0/18266 [00:00<?, ?it/s][ATraceback (most recent call last):
+  File "/root/miniconda3/envs/style-venv/lib/python3.7/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/root/miniconda3/envs/style-venv/lib/python3.7/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/root/miniconda3/envs/style-venv/lib/python3.7/site-packages/torch/distributed/launch.py", line 261, in <module>
+    main()
+  File "/root/miniconda3/envs/style-venv/lib/python3.7/site-packages/torch/distributed/launch.py", line 257, in main
+    cmd=cmd)
+subprocess.CalledProcessError: Command '['/root/miniconda3/envs/style-venv/bin/python', '-u', 'style_paraphrase/run_lm_finetuning.py', '--local_rank=0', '--output_dir=style_paraphrase/saved_models/test_paraphrase', '--model_type=gpt2', '--model_name_or_path=gpt2-large', '--data_dir=datasets/paranmt_filtered', '--do_train', '--save_steps', '500', '--logging_steps', '20', '--save_total_limit', '-1', '--evaluate_during_training', '--num_train_epochs', '3', '--gradient_accumulation_steps', '2', '--per_gpu_train_batch_size', '1', '--per_gpu_eval_batch_size', '1', '--job_id', 'paraphraser_test', '--learning_rate', '5e-5', '--prefix_input_type', 'original', '--global_dense_feature_list', 'none', '--specific_style_train', '-1', '--optimizer', 'adam', '--overwrite_output_dir', '--fp16', '--fp16_opt_level', 'O3', '--local_rank', '-1']' died with <Signals.SIGSEGV: 11>.

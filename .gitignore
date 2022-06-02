@@ -62,3 +62,7 @@ outputs/baselines/transform_delete_generate_formality
 
 input.tsv
 requirements-old.txt
+.*.swp
+.*.swo
+paraphraser_gpt2_large/
+shakespeare_models/

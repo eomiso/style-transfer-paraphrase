@@ -6,7 +6,7 @@ import torch
 from style_paraphrase.inference_utils import GPT2Generator
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model_dir', default="paraphraser_gpt2_large", type=str)
+parser.add_argument('--model_dir', default="../paraphraser_gpt2_large", type=str)
 parser.add_argument('--top_p_value', default=0.6, type=float)
 args = parser.parse_args()
 

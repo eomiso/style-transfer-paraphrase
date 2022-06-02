@@ -50,6 +50,8 @@ except ImportError:
 
 
 logger = logging.getLogger(__name__)
+handler = logging.FileHandler(f'style_paraphrase/logs/logfile.log')
+logger.addHandler(handler)
 
 MODEL_CLASSES = {
     'gpt2': (GPT2Config, GPT2LMHeadModel, GPT2Tokenizer),
@@ -144,7 +146,7 @@ def train(args, gpt2_model, train_dataset, tokenizer):
 
     args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
     train_sampler = RandomSampler(train_dataset) if args.local_rank == -1 else DistributedSampler(train_dataset)
-    train_dataloader = DataLoader(train_dataset, sampler=train_sampler, batch_size=args.train_batch_size)
+    train_dataloader = DataLoader(train_dataset, sampler=train_sampler, batch_size=args.train_batch_size, drop_last=True)
 
     if args.max_steps > 0:
         t_total = args.max_steps
@@ -311,7 +313,7 @@ def evaluate(args, gpt2_model, tokenizer, prefix=""):
     args.eval_batch_size = args.per_gpu_eval_batch_size * max(1, args.n_gpu)
     # Note that DistributedSampler samples randomly
     eval_sampler = SequentialSampler(eval_dataset) if args.local_rank == -1 else DistributedSampler(eval_dataset)
-    eval_dataloader = DataLoader(eval_dataset, sampler=eval_sampler, batch_size=args.eval_batch_size)
+    eval_dataloader = DataLoader(eval_dataset, sampler=eval_sampler, batch_size=args.eval_batch_size, drop_last=True)
 
     # multi-gpu evaluate
     if args.n_gpu > 1:
@@ -329,7 +331,7 @@ def evaluate(args, gpt2_model, tokenizer, prefix=""):
     gpt2_model.eval()
 
     for batch in tqdm(eval_dataloader, desc="Evaluating"):
-        curr_loss = gpt2_model.evaluate(batch)
+        curr_loss = gpt2_model.evaluate(batch) if args.n_gpu == 1 else gpt2_model.module.evaluate(batch)
         eval_loss += curr_loss
         total_instances += batch["suffix_style"].shape[0]
         nb_eval_steps += 1
@@ -429,7 +431,7 @@ def main():
             os.makedirs(output_dir)
         save_model(gpt2_model, output_dir, args, global_step, tokenizer)
 
-        gpt2_model, tokenizer = init_gpt2_model(checkpoint_dir=args.output_dir,
+        gpt2_model, tokenizer = init_gpt2_model(checkpoint_dir=output_dir,
                                                 args=args,
                                                 model_class=model_class,
                                                 tokenizer_class=tokenizer_class)
@@ -497,8 +499,6 @@ def main():
             else:
                 logger.info("Sleeping for {:d} minutes...zzzz...".format(args.eval_frequency_min))
                 time.sleep(args.eval_frequency_min * 60)
-
-    return all_results
 
 
 if __name__ == "__main__":
